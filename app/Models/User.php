@@ -16,9 +16,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'phone',
+        'country',
+        'city',
         'password',
+        'is_verified',
+        'verification_code',
     ];
 
 
@@ -36,7 +42,13 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_verified' => 'boolean',
             'password' => 'hashed',
         ];
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }
