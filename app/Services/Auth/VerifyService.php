@@ -20,10 +20,6 @@ class VerifyService
             return ['success' => false, 'error' => 'User not found'];
         }
 
-        if ($user->is_verified) {
-            return ['success' => false, 'error' => 'User already verified'];
-        }
-
         if ($user->verification_code !== $dto->verification_code) {
             return ['success' => false, 'error' => 'Invalid verification code'];
         }

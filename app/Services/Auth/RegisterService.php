@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Exception;
 use App\Traits\ApiResponse;
 use App\DTOs\Auth\RegisterUserDTO;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerificationMail;
 
 class RegisterService
 {
@@ -19,26 +21,17 @@ class RegisterService
     {
         try {
 
-            $userData = [
-                'first_name' => $dto->first_name,
-                'last_name' => $dto->last_name,
-                'email' => $dto->email ?? null,
-                'phone' => $dto->phone ?? null,
-                'country' => $dto->country,
-                'city' => $dto->city,
-                'password' => Hash::make($dto->password),
-                'is_verified' => false,
-                'verification_code' => rand(1000, 9999),
-            ];
+            $userData = $dto->toArray();
 
+            $userData['password'] = Hash::make($dto->password);
+            $userData['verification_code'] = rand(1000, 9999);
 
             $user = $this->userRepository->create($userData);
 
-
             if ($user->email) {
-                // Mail::to($user->email)->send(new VerificationMail($user->verification_code));
+                Mail::to($user->email)->send(new VerificationMail($user->verification_code));
             } elseif ($user->phone) {
-                // Service لإرسال SMS
+                // Service to send SMS
             }
 
             return [

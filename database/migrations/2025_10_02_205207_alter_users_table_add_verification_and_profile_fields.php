@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->string('country')->after('phone');
             $table->string('city')->after('country');
 
-            $table->boolean('is_verified')->default(false)->after('password');
             $table->string('verification_code')->nullable()->after('is_verified');
         });
     }
@@ -42,7 +41,6 @@ return new class extends Migration {
                     'phone',
                     'country',
                     'city',
-                    'is_verified',
                     'verification_code',
                 ]);
             });

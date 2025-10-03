@@ -23,10 +23,7 @@ class RegisterController extends Controller
 
         if ($result['success']) {
             return $this->successResponse(
-                [
-                    new UserResource($result['user']),
-                    'verification_code' => $result['verification_code']
-                ],
+                new UserResource($result['user']),
                 'User registered successfully. Verification code sent.'
             );
         }
