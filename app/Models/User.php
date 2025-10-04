@@ -51,4 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return "{$this->first_name} {$this->last_name}";
     }
+
+    public function assignedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'product_user')->withTimestamps();
+    }
 }

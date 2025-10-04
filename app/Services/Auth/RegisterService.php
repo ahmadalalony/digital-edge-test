@@ -28,6 +28,8 @@ class RegisterService
 
             $user = $this->userRepository->create($userData);
 
+            $user->assignRole('User');
+
             if ($user->email) {
                 Mail::to($user->email)->send(new VerificationMail($user->verification_code));
             } elseif ($user->phone) {

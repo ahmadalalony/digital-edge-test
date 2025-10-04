@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerifyController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordManagementController;
+use App\Http\Controllers\product\ProductController;
+use App\Http\Controllers\product\ProductAssignmentController;
 
 
 Route::prefix('v1')->group(function () {
@@ -18,4 +20,21 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('/change-password', [PasswordManagementController::class, 'changePassword']);
     Route::post('forgot-password', [PasswordManagementController::class, 'forgotPassword']);
     Route::post('/reset-password', [PasswordManagementController::class, 'resetPassword']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('v1/products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::post('/', [ProductController::class, 'store']);
+    Route::put('/{id}', [ProductController::class, 'update']);
+    Route::delete('/{id}', [ProductController::class, 'destroy']);
+});
+
+
+Route::middleware(['auth:sanctum'])->prefix('v1/products')->group(function () {
+    Route::middleware('role:Admin')->group(function () {
+        Route::post('/assign', [ProductAssignmentController::class, 'assign']);
+        Route::post('/unassign', [ProductAssignmentController::class, 'unassign']);
+    });
+
+    Route::get('/user-products', [ProductAssignmentController::class, 'userProducts'])->middleware('role:User|Admin');
 });
