@@ -16,7 +16,7 @@ class ChangePasswordService
 
     public function changePassword(ChangePasswordDTO $dto): array
     {
-        $user = User::find($dto->userId);
+        $user = $this->userRepository->findById($dto->userId);
 
         if (!$user) {
             return ['success' => false, 'error' => 'User not found'];

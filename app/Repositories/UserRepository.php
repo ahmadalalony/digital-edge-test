@@ -32,6 +32,7 @@ class UserRepository
     public function updatePassword(User $user, string $newPassword): User
     {
         $user->password = Hash::make($newPassword);
+        $user->verification_code = null;
         $user->save();
 
         return $user;
@@ -44,4 +45,16 @@ class UserRepository
 
         return $user;
     }
+
+    public function findById(int $id): ?User
+    {
+        return User::find($id);
+    }
+
+    public function checkVerificationCode(User $user, string $code): bool
+    {
+        return $user->verification_code === $code;
+    }
+
+
 }

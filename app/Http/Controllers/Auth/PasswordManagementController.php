@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ChangePasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\Auth\ChangePasswordService;
 use App\DTOs\Auth\ChangePasswordDTO;
 use App\Http\Resources\UserResource;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Services\Auth\ForgotPasswordService;
 use App\DTOs\Auth\ForgotPasswordDTO;
+use App\DTOs\Auth\ResetPasswordDTO;
+use App\Services\Auth\ResetPasswordService;
 
 class PasswordManagementController extends Controller
 {
@@ -19,7 +22,8 @@ class PasswordManagementController extends Controller
 
     public function __construct(
         private ChangePasswordService $changePasswordService,
-        private ForgotPasswordService $forgotPasswordService
+        private ForgotPasswordService $forgotPasswordService,
+        private ResetPasswordService $resetPasswordService
     ) {
     }
 
@@ -58,5 +62,25 @@ class PasswordManagementController extends Controller
         }
 
         return $this->errorResponse('Forgot password failed', 400, $result['error']);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $dto = new ResetPasswordDTO(
+            Auth::id(),
+            $request->verification_code,
+            $request->new_password
+        );
+
+        $result = $this->resetPasswordService->resetPassword($dto);
+
+        if ($result['success']) {
+            return $this->successResponse(
+                new UserResource($result['user']),
+                'Password reset successfully'
+            );
+        }
+
+        return $this->errorResponse('Password reset failed', 400, $result['error']);
     }
 }

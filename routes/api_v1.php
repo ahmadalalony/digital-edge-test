@@ -16,5 +16,6 @@ Route::prefix('v1')->group(function () {
 
 Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     Route::post('/change-password', [PasswordManagementController::class, 'changePassword']);
-    Route::post('/forgot-password', [PasswordManagementController::class, 'forgotPassword']);
+    Route::post('forgot-password', [PasswordManagementController::class, 'forgotPassword']);
+    Route::post('/reset-password', [PasswordManagementController::class, 'resetPassword']);
 });
