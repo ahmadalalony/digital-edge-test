@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordMail;
-
+use App\Traits\LogsActivityCustom;
 
 class ForgotPasswordService
 {
+    use LogsActivityCustom;
     public function __construct(private UserRepository $userRepository)
     {
     }
@@ -33,6 +34,8 @@ class ForgotPasswordService
         } elseif ($user->phone) {
             //send sms
         }
+
+        $this->logActivity('Reset Code Sent', ['user_id' => $user->id, 'user_email' => $user->email], $user);
 
         return [
             'success' => true,

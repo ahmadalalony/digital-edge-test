@@ -6,10 +6,11 @@ use App\DTOs\Auth\ChangePasswordDTO;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
+use App\Traits\LogsActivityCustom;
 
 class ChangePasswordService
 {
+    use LogsActivityCustom;
     public function __construct(private UserRepository $userRepository)
     {
     }
@@ -27,6 +28,8 @@ class ChangePasswordService
         }
 
         $this->userRepository->updatePassword($user, $dto->new_password);
+
+        $this->logActivity('Password Changed', ['user_id' => $user->id, 'user_email' => $user->email], $user);
 
         return ['success' => true, 'user' => $user];
     }

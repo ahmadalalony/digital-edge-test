@@ -4,9 +4,10 @@ namespace App\Services\Auth;
 
 use App\DTOs\Auth\VerifyUserDTO;
 use App\Repositories\UserRepository;
-
+use App\Traits\LogsActivityCustom;
 class VerifyService
 {
+    use LogsActivityCustom;
     public function __construct(
         private UserRepository $userRepository
     ) {
@@ -25,6 +26,8 @@ class VerifyService
         }
 
         $this->userRepository->verifyUser($user);
+
+        $this->logActivity('User Verified', ['user_id' => $user->id, 'user_email' => $user->email], $user);
 
         return ['success' => true, 'user' => $user];
     }

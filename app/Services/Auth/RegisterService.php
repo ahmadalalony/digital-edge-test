@@ -10,9 +10,12 @@ use App\Traits\ApiResponse;
 use App\DTOs\Auth\RegisterUserDTO;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerificationMail;
+use App\Traits\LogsActivityCustom;
 
 class RegisterService
 {
+    use LogsActivityCustom;
+
     public function __construct(private UserRepository $userRepository)
     {
     }
@@ -29,6 +32,13 @@ class RegisterService
             $user = $this->userRepository->create($userData);
 
             $user->assignRole('User');
+
+
+            $this->logActivity(
+                'User registered',
+                ['user_id' => $user->id, 'user_email' => $user->email],
+                $user
+            );
 
             if ($user->email) {
                 Mail::to($user->email)->send(new VerificationMail($user->verification_code));
