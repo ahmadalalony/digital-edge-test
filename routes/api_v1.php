@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordManagementController;
 use App\Http\Controllers\product\ProductController;
 use App\Http\Controllers\product\ProductAssignmentController;
+use App\Http\Controllers\User\UserController;
+
 
 
 Route::prefix('v1')->group(function () {
@@ -37,4 +39,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1/products')->group(function () {
     });
 
     Route::get('/user-products', [ProductAssignmentController::class, 'userProducts'])->middleware('role:User|Admin');
+});
+
+Route::middleware(['auth:sanctum', 'role:Admin'])->prefix('v1/users')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
 });

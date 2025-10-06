@@ -13,6 +13,27 @@ class UserRepository
         return User::create($data);
     }
 
+    public function getAllPaginated(int $perPage = 10)
+    {
+        return User::paginate($perPage);
+    }
+
+    public function findById(int $id): ?User
+    {
+        return User::find($id);
+    }
+
+    public function update(User $user, array $data): User
+    {
+        $user->update($data);
+        return $user;
+    }
+
+    public function delete(User $user): bool
+    {
+        return $user->delete();
+    }
+
     public function findByIdentifier(string $identifier): ?User
     {
         return User::where('email', $identifier)
@@ -46,15 +67,12 @@ class UserRepository
         return $user;
     }
 
-    public function findById(int $id): ?User
-    {
-        return User::find($id);
-    }
 
     public function checkVerificationCode(User $user, string $code): bool
     {
         return $user->verification_code === $code;
     }
+
 
 
 }

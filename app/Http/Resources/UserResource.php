@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-
 class UserResource extends ApiResource
 {
     /**
@@ -13,7 +12,7 @@ class UserResource extends ApiResource
      */
     public function toArray(Request $request): array
     {
-        $userData = [
+        return [
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
@@ -26,6 +25,5 @@ class UserResource extends ApiResource
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
 
-        return parent::toArray($request) + ['data' => $userData];
     }
 }
