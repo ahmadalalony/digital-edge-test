@@ -5,9 +5,11 @@ namespace App\Services\User;
 use App\Repositories\UserRepository;
 use App\DTOs\User\UpdateUserDTO;
 use Exception;
+use App\Traits\LogsActivityCustom;
 
 class UserService
 {
+    use LogsActivityCustom;
     public function __construct(private UserRepository $userRepository)
     {
     }
@@ -35,6 +37,8 @@ class UserService
             }
 
             $updated = $this->userRepository->update($user, array_filter($dto->toArray()));
+            $this->logActivity('User Updated', ['user_id' => $user->id, 'user_email' => $user->email], $user);
+
             return ['success' => true, 'user' => $updated];
         } catch (Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
@@ -50,6 +54,8 @@ class UserService
             }
 
             $this->userRepository->delete($user);
+            $this->logActivity('User Deleted', ['user_id' => $user->id, 'user_email' => $user->email], $user);
+
             return ['success' => true];
         } catch (Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
