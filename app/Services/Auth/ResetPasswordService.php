@@ -6,9 +6,11 @@ use App\DTOs\Auth\ResetPasswordDTO;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use App\Traits\LogsActivityCustom;
 
 class ResetPasswordService
 {
+    use LogsActivityCustom;
     public function __construct(private UserRepository $userRepository)
     {
     }
@@ -40,6 +42,8 @@ class ResetPasswordService
         $this->userRepository->updatePassword($user, $dto->new_password);
 
         RateLimiter::clear($key);
+
+        $this->logActivity('Password Reset', ['user_id' => $user->id, 'user_email' => $user->email], $user);
 
         return ['success' => true, 'user' => $user];
     }

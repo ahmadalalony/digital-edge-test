@@ -7,9 +7,11 @@ use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use App\Traits\LogsActivityCustom;
 
 class LoginService
 {
+    use LogsActivityCustom;
     public function __construct(
         private UserRepository $userRepository
     ) {
@@ -47,6 +49,8 @@ class LoginService
         RateLimiter::clear($key);
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->logActivity('User Logged In', ['identifier' => $identifier], $user);
 
         return [
             'success' => true,

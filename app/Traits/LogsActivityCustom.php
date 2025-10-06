@@ -10,9 +10,13 @@ trait LogsActivityCustom
 {
     protected function logActivity(string $description, ?array $properties = [], $subject = null): void
     {
-        ActivityFacade::causedBy(auth()->user() ?? null)
-            ->performedOn($subject)
-            ->withProperties($properties ?? [])
+        $activity = ActivityFacade::causedBy(auth()->user() ?? null);
+
+        if ($subject !== null) {
+            $activity->performedOn($subject);
+        }
+
+        $activity->withProperties($properties ?? [])
             ->log($description);
     }
 }
