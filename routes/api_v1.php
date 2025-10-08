@@ -9,6 +9,7 @@ use App\Http\Controllers\product\ProductController;
 use App\Http\Controllers\product\ProductAssignmentController;
 use App\Http\Controllers\User\UserController;
 
+use App\Http\Controllers\Admin\DashboardController;
 
 
 Route::prefix('v1')->group(function () {
@@ -46,4 +47,9 @@ Route::middleware(['auth:sanctum', 'role:Admin'])->prefix('v1/users')->group(fun
     Route::get('/{id}', [UserController::class, 'show']);
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
+});
+
+
+Route::middleware(['auth:sanctum', 'role:Admin'])->prefix('v1/dashboard')->group(function () {
+    Route::get('/overview', [DashboardController::class, 'overview']);
 });
