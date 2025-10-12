@@ -10,8 +10,7 @@ class ResetPasswordDTO extends BaseDTO
         public int $userId,
         public string $verificationCode,
         public string $newPassword
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

@@ -14,9 +14,7 @@ class ProductAssignmentController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private ProductAssignmentService $service)
-    {
-    }
+    public function __construct(private ProductAssignmentService $service) {}
 
     public function assign(AssignProductRequest $request)
     {
@@ -45,5 +43,3 @@ class ProductAssignmentController extends Controller
             : $this->errorResponse('Failed to get user products', 400, $result['error']);
     }
 }
-
-

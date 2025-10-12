@@ -10,9 +10,7 @@ class DashboardController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private DashboardService $dashboardService)
-    {
-    }
+    public function __construct(private DashboardService $dashboardService) {}
 
     public function overview()
     {
@@ -21,5 +19,3 @@ class DashboardController extends Controller
         return $this->successResponse($data, 'Dashboard statistics retrieved successfully');
     }
 }
-
-

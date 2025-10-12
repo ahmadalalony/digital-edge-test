@@ -15,8 +15,7 @@ class UpdateProductDTO extends BaseDTO
         public ?float $price = null,
         public ?string $primaryImage = null,
         public ?array $otherImages = null
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {
@@ -38,20 +37,27 @@ class UpdateProductDTO extends BaseDTO
     {
         $data = [];
 
-        if ($this->titleEn !== null)
+        if ($this->titleEn !== null) {
             $data['title_en'] = $this->titleEn;
-        if ($this->titleAr !== null)
+        }
+        if ($this->titleAr !== null) {
             $data['title_ar'] = $this->titleAr;
-        if ($this->descriptionEn !== null)
+        }
+        if ($this->descriptionEn !== null) {
             $data['description_en'] = $this->descriptionEn;
-        if ($this->descriptionAr !== null)
+        }
+        if ($this->descriptionAr !== null) {
             $data['description_ar'] = $this->descriptionAr;
-        if ($this->price !== null)
+        }
+        if ($this->price !== null) {
             $data['price'] = $this->price;
-        if ($this->primaryImage !== null)
+        }
+        if ($this->primaryImage !== null) {
             $data['primary_image'] = $this->primaryImage;
-        if ($this->otherImages !== null)
+        }
+        if ($this->otherImages !== null) {
             $data['other_images'] = $this->otherImages;
+        }
 
         return $data;
     }

@@ -9,8 +9,7 @@ class AssignProductDTO extends BaseDTO
     public function __construct(
         public int $productId,
         public int $userId
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

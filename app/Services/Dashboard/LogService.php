@@ -6,7 +6,7 @@ class LogService
 {
     public function tailLog(string $filePath, int $lines = 200): array
     {
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return [];
         }
 
@@ -50,9 +50,9 @@ class LogService
             } elseif ($currentError && (str_starts_with($line, '#') || str_starts_with($line, 'Stack trace:'))) {
                 // Add to stack trace
                 $currentError['stack_trace'][] = $this->shortenPath($line);
-            } elseif ($currentError && !empty(trim($line))) {
+            } elseif ($currentError && ! empty(trim($line))) {
                 // Add to message continuation
-                $currentError['message'] .= ' ' . trim($line);
+                $currentError['message'] .= ' '.trim($line);
             }
         }
 
@@ -67,8 +67,7 @@ class LogService
     private function shortenPath(string $path): string
     {
         $basePath = base_path();
-        return str_replace($basePath . DIRECTORY_SEPARATOR, '', $path);
+
+        return str_replace($basePath.DIRECTORY_SEPARATOR, '', $path);
     }
 }
-
-

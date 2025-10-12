@@ -7,9 +7,7 @@ use Exception;
 
 class DashboardService
 {
-    public function __construct(private DashboardRepositoryInterface $dashboardRepository)
-    {
-    }
+    public function __construct(private DashboardRepositoryInterface $dashboardRepository) {}
 
     public function getOverviewData(): array
     {
@@ -22,7 +20,7 @@ class DashboardService
                 'products_last_week' => $this->dashboardRepository->getProductsCountLastWeek(),
             ];
         } catch (Exception $e) {
-            throw new Exception('Error fetching dashboard data: ' . $e->getMessage());
+            throw new Exception('Error fetching dashboard data: '.$e->getMessage());
         }
     }
 

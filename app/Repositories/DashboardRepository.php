@@ -4,10 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Notifications\DatabaseNotification;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\DB;
 
 class DashboardRepository implements DashboardRepositoryInterface
 {
@@ -46,7 +46,7 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->pluck('count', 'date');
 
         $dates = collect(range(0, 6))
-            ->mapWithKeys(fn($i) => [
+            ->mapWithKeys(fn ($i) => [
                 Carbon::now()->subDays(6 - $i)->toDateString() => $data->get(Carbon::now()->subDays(6 - $i)->toDateString(), 0),
             ]);
 

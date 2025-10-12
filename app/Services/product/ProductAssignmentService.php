@@ -16,19 +16,18 @@ class ProductAssignmentService
     public function __construct(
         private ProductRepositoryInterface $productRepository,
         private UserRepositoryInterface $userRepository
-    ) {
-    }
+    ) {}
 
     public function assign(AssignProductDTO $dto): array
     {
         $product = $this->productRepository->findById($dto->productId);
         $user = $this->userRepository->findById($dto->userId);
 
-        if (!$product || !$user) {
+        if (! $product || ! $user) {
             return ['success' => false, 'error' => 'Invalid product or user'];
         }
 
-        if (!$this->productRepository->assignToUser($product, $user)) {
+        if (! $this->productRepository->assignToUser($product, $user)) {
             return ['success' => false, 'error' => 'Product already assigned to user'];
         }
 
@@ -47,11 +46,11 @@ class ProductAssignmentService
         $product = $this->productRepository->findById($dto->productId);
         $user = $this->userRepository->findById($dto->userId);
 
-        if (!$product || !$user) {
+        if (! $product || ! $user) {
             return ['success' => false, 'error' => 'Invalid product or user'];
         }
 
-        if (!$this->productRepository->unassignFromUser($product, $user)) {
+        if (! $this->productRepository->unassignFromUser($product, $user)) {
             return ['success' => false, 'error' => 'Product not assigned to user'];
         }
 
@@ -68,7 +67,7 @@ class ProductAssignmentService
     public function getUserProducts(int $userId)
     {
         $user = $this->userRepository->findById($userId);
-        if (!$user) {
+        if (! $user) {
             return ['success' => false, 'error' => 'User not found'];
         }
 

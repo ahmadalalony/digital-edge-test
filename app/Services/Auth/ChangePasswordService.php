@@ -11,19 +11,17 @@ class ChangePasswordService
 {
     use LogsActivityCustom;
 
-    public function __construct(private UserRepositoryInterface $userRepository)
-    {
-    }
+    public function __construct(private UserRepositoryInterface $userRepository) {}
 
     public function changePassword(ChangePasswordDTO $dto): array
     {
         $user = $this->userRepository->findById($dto->userId);
 
-        if (!$user) {
+        if (! $user) {
             return ['success' => false, 'error' => 'User not found'];
         }
 
-        if (!Hash::check($dto->currentPassword, $user->password)) {
+        if (! Hash::check($dto->currentPassword, $user->password)) {
             return ['success' => false, 'error' => 'Current password is incorrect'];
         }
 

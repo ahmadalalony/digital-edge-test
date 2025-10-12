@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\Dashboard\DashboardService;
 use App\Services\Dashboard\LogService;
+use Illuminate\Http\Request;
 
 class ActivityLogController extends Controller
 {
-    public function __construct(private DashboardService $dashboardService, private LogService $logService)
-    {
-    }
+    public function __construct(private DashboardService $dashboardService, private LogService $logService) {}
 
     public function index(Request $request)
     {
@@ -39,5 +37,4 @@ class ActivityLogController extends Controller
 
         return view('dashboard.activity_logs.index', $data);
     }
-
 }

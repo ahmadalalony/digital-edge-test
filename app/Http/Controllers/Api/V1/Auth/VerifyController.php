@@ -13,9 +13,7 @@ class VerifyController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private VerifyService $verifyService)
-    {
-    }
+    public function __construct(private VerifyService $verifyService) {}
 
     public function verify(VerifyRequest $request)
     {
@@ -28,5 +26,3 @@ class VerifyController extends Controller
         return $this->errorResponse('Verification failed', 400, $result['error']);
     }
 }
-
-

@@ -11,9 +11,7 @@ use App\Services\User\UserService;
 
 class UserViewController extends Controller
 {
-    public function __construct(private UserService $userService)
-    {
-    }
+    public function __construct(private UserService $userService) {}
 
     public function index()
     {
@@ -28,10 +26,11 @@ class UserViewController extends Controller
     public function edit($id)
     {
         $result = $this->userService->findWithRelations((int) $id, ['assignedProducts']);
-        if (!$result['success']) {
+        if (! $result['success']) {
             abort(404);
         }
         $user = $result['user'];
+
         return view('dashboard.users.edit', compact('user'));
     }
 
@@ -50,17 +49,18 @@ class UserViewController extends Controller
     public function emailForm($id)
     {
         $result = $this->userService->show((int) $id);
-        if (!$result['success']) {
+        if (! $result['success']) {
             abort(404);
         }
         $user = $result['user'];
+
         return view('dashboard.users.email', compact('user'));
     }
 
     public function sendEmail(SendEmailRequest $request, $id)
     {
         $result = $this->userService->show((int) $id);
-        if (!$result['success']) {
+        if (! $result['success']) {
             abort(404);
         }
         $user = $result['user'];

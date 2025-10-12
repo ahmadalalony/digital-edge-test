@@ -18,9 +18,7 @@ class ProductController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private ProductService $productService)
-    {
-    }
+    public function __construct(private ProductService $productService) {}
 
     public function index(Request $request)
     {
@@ -64,5 +62,3 @@ class ProductController extends Controller
         return Excel::download(new ProductsExport($request->all()), 'products.csv', \Maatwebsite\Excel\Excel::CSV);
     }
 }
-
-

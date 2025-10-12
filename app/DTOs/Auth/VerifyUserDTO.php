@@ -9,8 +9,7 @@ class VerifyUserDTO extends BaseDTO
     public function __construct(
         public string $identifier, // email or phone
         public string $verificationCode
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

@@ -12,14 +12,13 @@ class VerifyService
 
     public function __construct(
         private UserRepositoryInterface $userRepository
-    ) {
-    }
+    ) {}
 
     public function verify(VerifyUserDTO $dto): array
     {
         $user = $this->userRepository->findByIdentifier($dto->identifier);
 
-        if (!$user) {
+        if (! $user) {
             return ['success' => false, 'error' => 'User not found'];
         }
 

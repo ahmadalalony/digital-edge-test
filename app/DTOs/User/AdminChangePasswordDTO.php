@@ -10,8 +10,7 @@ class AdminChangePasswordDTO extends BaseDTO
         public int $userId,
         public string $newPassword,
         public int $adminId
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

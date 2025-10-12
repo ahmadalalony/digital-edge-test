@@ -63,7 +63,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function unassignFromUser(Product $product, User $user): bool
     {
-        if (!$product->assignedUsers()->where('user_id', $user->id)->exists()) {
+        if (! $product->assignedUsers()->where('user_id', $user->id)->exists()) {
             return false;
         }
         $product->assignedUsers()->detach($user->id);

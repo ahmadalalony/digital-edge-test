@@ -17,14 +17,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
-
 class UserController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private UserService $userService)
-    {
-    }
+    public function __construct(private UserService $userService) {}
 
     public function index(Request $request)
     {
@@ -66,7 +63,7 @@ class UserController extends Controller
 
             $validated['password'] = Hash::make($validated['password']);
             $result = $this->userService->create($validated);
-            if (!$result['success']) {
+            if (! $result['success']) {
                 throw new \Exception($result['error'] ?? 'User creation failed');
             }
             $user = $result['user'];
@@ -75,7 +72,7 @@ class UserController extends Controller
             Log::info('User created successfully', [
                 'user_id' => $user->id,
                 'email' => $user->email,
-                'created_by' => Auth::id()
+                'created_by' => Auth::id(),
             ]);
 
             return redirect()->route('admin_users_index')->with('success', __('dashboard.User created successfully'));
@@ -85,7 +82,7 @@ class UserController extends Controller
             Log::warning('User creation validation failed', [
                 'errors' => $e->errors(),
                 'input' => $request->except('password', 'password_confirmation'),
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
 
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -96,7 +93,7 @@ class UserController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'input' => $request->except('password', 'password_confirmation'),
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
 
             return redirect()->back()->withErrors(['error' => __('dashboard.Error occurred while creating user')])->withInput();
@@ -110,6 +107,7 @@ class UserController extends Controller
         if ($result['success']) {
             return $this->successResponse([], 'User deleted successfully');
         }
+
         return $this->errorResponse('User deletion failed', 400, $result['error']);
     }
 
@@ -124,9 +122,9 @@ class UserController extends Controller
         $result = $this->userService->adminChangePassword(AdminChangePasswordDTO::fromArray([
             'user_id' => $id,
             'new_password' => $request->validated()['new_password'],
-            'admin_id' => Auth::id()
+            'admin_id' => Auth::id(),
         ]));
-        if (!$result['success']) {
+        if (! $result['success']) {
             return redirect()->back()->withErrors(['error' => $result['error'] ?? __('dashboard.Error occurred while changing password')]);
         }
 
@@ -139,7 +137,7 @@ class UserController extends Controller
             $dto = AdminChangePasswordDTO::fromArray([
                 'user_id' => $id,
                 'new_password' => $request->validated()['new_password'],
-                'admin_id' => Auth::id()
+                'admin_id' => Auth::id(),
             ]);
 
             $result = $this->userService->adminChangePassword($dto);
@@ -154,7 +152,7 @@ class UserController extends Controller
             Log::error('Admin password change request failed', [
                 'error' => $e->getMessage(),
                 'user_id' => $id,
-                'admin_id' => Auth::id()
+                'admin_id' => Auth::id(),
             ]);
 
             return redirect()->back()->withErrors(['error' => __('dashboard.Error occurred while changing password')]);

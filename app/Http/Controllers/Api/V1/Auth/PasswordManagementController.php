@@ -24,8 +24,7 @@ class PasswordManagementController extends Controller
         private ChangePasswordService $changePasswordService,
         private ForgotPasswordService $forgotPasswordService,
         private ResetPasswordService $resetPasswordService
-    ) {
-    }
+    ) {}
 
     public function changePassword(ChangePasswordRequest $request)
     {
@@ -64,5 +63,3 @@ class PasswordManagementController extends Controller
         return $this->errorResponse('Password reset failed', 400, $result['error']);
     }
 }
-
-

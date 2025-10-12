@@ -11,9 +11,7 @@ class DashboardController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private DashboardService $dashboardService)
-    {
-    }
+    public function __construct(private DashboardService $dashboardService) {}
 
     public function index()
     {

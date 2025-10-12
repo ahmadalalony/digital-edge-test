@@ -3,8 +3,8 @@
 namespace App\Services\User;
 
 use App\DTOs\User\AdminChangePasswordDTO;
-use App\DTOs\User\UpdateUserDTO;
 use App\DTOs\User\SendEmailDTO;
+use App\DTOs\User\UpdateUserDTO;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\LogsActivityCustom;
 use Exception;
@@ -14,9 +14,7 @@ class UserService
 {
     use LogsActivityCustom;
 
-    public function __construct(private UserRepositoryInterface $userRepository)
-    {
-    }
+    public function __construct(private UserRepositoryInterface $userRepository) {}
 
     public function list(int $perPage = 10, ?string $search = null, array $filters = [])
     {
@@ -26,7 +24,7 @@ class UserService
     public function show(int $id)
     {
         $user = $this->userRepository->findById($id);
-        if (!$user) {
+        if (! $user) {
             return ['success' => false, 'error' => 'User not found'];
         }
 
@@ -37,7 +35,7 @@ class UserService
     {
         try {
             $user = $this->userRepository->findById($dto->id);
-            if (!$user) {
+            if (! $user) {
                 return ['success' => false, 'error' => 'User not found'];
             }
 
@@ -47,7 +45,7 @@ class UserService
             Log::info('Updating user', [
                 'user_id' => $dto->id,
                 'update_data' => $updateData,
-                'dto_data' => get_object_vars($dto)
+                'dto_data' => get_object_vars($dto),
             ]);
 
             $updated = $this->userRepository->update($user, $updateData);
@@ -60,7 +58,7 @@ class UserService
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'dto_data' => get_object_vars($dto),
-                'user_id' => $dto->id
+                'user_id' => $dto->id,
             ]);
 
             return ['success' => false, 'error' => $e->getMessage()];
@@ -71,7 +69,7 @@ class UserService
     {
         try {
             $user = $this->userRepository->findById($id);
-            if (!$user) {
+            if (! $user) {
                 return ['success' => false, 'error' => 'User not found'];
             }
 
@@ -89,9 +87,11 @@ class UserService
         try {
             $user = $this->userRepository->create($data);
             $this->logActivity('User Created', ['user_id' => $user->id, 'user_email' => $user->email], $user);
+
             return ['success' => true, 'user' => $user];
         } catch (Exception $e) {
             Log::error('User creation failed', ['error' => $e->getMessage(), 'data' => $data]);
+
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
@@ -99,9 +99,10 @@ class UserService
     public function findWithRelations(int $id, array $relations = [])
     {
         $user = $this->userRepository->findByIdWithRelations($id, $relations);
-        if (!$user) {
+        if (! $user) {
             return ['success' => false, 'error' => 'User not found'];
         }
+
         return ['success' => true, 'user' => $user];
     }
 
@@ -114,23 +115,22 @@ class UserService
     {
         try {
             $user = $this->userRepository->findById($dto->userId);
-            if (!$user) {
+            if (! $user) {
                 return ['success' => false, 'error' => 'User not found'];
             }
-
 
             $this->userRepository->updatePassword($user, $dto->newPassword);
 
             $this->logActivity('Password Changed by Admin', [
                 'user_id' => $user->id,
                 'user_email' => $user->email,
-                'admin_id' => $dto->adminId
+                'admin_id' => $dto->adminId,
             ], $user);
 
             Log::info('Admin password change successful', [
                 'user_id' => $dto->userId,
                 'admin_id' => $dto->adminId,
-                'user_email' => $user->email
+                'user_email' => $user->email,
             ]);
 
             return ['success' => true, 'message' => 'Password changed successfully'];
@@ -141,7 +141,7 @@ class UserService
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'user_id' => $dto->userId,
-                'admin_id' => $dto->adminId
+                'admin_id' => $dto->adminId,
             ]);
 
             return ['success' => false, 'error' => $e->getMessage()];

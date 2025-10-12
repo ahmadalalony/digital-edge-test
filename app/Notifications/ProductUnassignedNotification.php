@@ -12,15 +12,12 @@ class ProductUnassignedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public string $productName, public string $unassignedBy)
-    {
-    }
+    public function __construct(public string $productName, public string $unassignedBy) {}
 
     public function via(object $notifiable): array
     {
         return ['database', 'broadcast'];
     }
-
 
     public function toMail(object $notifiable): MailMessage
     {
@@ -30,7 +27,6 @@ class ProductUnassignedNotification extends Notification implements ShouldQueue
             ->line("Unassigned by: {$this->unassignedBy}")
             ->line('Thank you for using our application!');
     }
-
 
     public function toArray(object $notifiable): array
     {

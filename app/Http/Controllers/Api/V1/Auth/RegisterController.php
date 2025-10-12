@@ -13,9 +13,7 @@ class RegisterController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private RegisterService $registerService)
-    {
-    }
+    public function __construct(private RegisterService $registerService) {}
 
     public function register(RegisterRequest $request)
     {
@@ -31,5 +29,3 @@ class RegisterController extends Controller
         return $this->errorResponse('Registration failed', 500, $result['error']);
     }
 }
-
-

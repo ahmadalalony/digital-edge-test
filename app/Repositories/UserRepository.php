@@ -26,10 +26,10 @@ class UserRepository implements UserRepositoryInterface
             });
         }
 
-        if (!empty($filters['country'])) {
+        if (! empty($filters['country'])) {
             $query->where('country', 'like', "%{$filters['country']}%");
         }
-        if (!empty($filters['city'])) {
+        if (! empty($filters['city'])) {
             $query->where('city', 'like', "%{$filters['city']}%");
         }
 

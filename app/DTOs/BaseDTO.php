@@ -25,9 +25,9 @@ abstract class BaseDTO
     {
         $missing = array_diff($required, array_keys($data));
 
-        if (!empty($missing)) {
+        if (! empty($missing)) {
             throw new InvalidArgumentException(
-                'Missing required fields: ' . implode(', ', $missing)
+                'Missing required fields: '.implode(', ', $missing)
             );
         }
     }

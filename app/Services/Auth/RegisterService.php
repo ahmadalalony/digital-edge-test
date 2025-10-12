@@ -14,9 +14,7 @@ class RegisterService
 {
     use LogsActivityCustom;
 
-    public function __construct(private UserRepositoryInterface $userRepository)
-    {
-    }
+    public function __construct(private UserRepositoryInterface $userRepository) {}
 
     public function register(RegisterUserDTO $dto)
     {
