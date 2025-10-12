@@ -15,8 +15,7 @@ class CreateProductDTO extends BaseDTO
         public ?string $primaryImage,
         public ?array $otherImages,
         public int $createdBy
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

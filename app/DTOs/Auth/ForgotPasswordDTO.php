@@ -8,8 +8,7 @@ class ForgotPasswordDTO extends BaseDTO
 {
     public function __construct(
         public string $identifier
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

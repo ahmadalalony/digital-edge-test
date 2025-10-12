@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Services\Dashboard\DashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Dashboard\DashboardService;
 
 class NotificationController extends Controller
 {
-    public function __construct(private DashboardService $dashboardService)
-    {
-    }
-
+    public function __construct(private DashboardService $dashboardService) {}
 
     public function index(Request $request)
     {
@@ -30,10 +27,9 @@ class NotificationController extends Controller
                     'time_ago' => $notification->created_at->diffForHumans(),
                 ];
             }),
-            'unread_count' => $this->dashboardService->getUserUnreadCount($user->id)
+            'unread_count' => $this->dashboardService->getUserUnreadCount($user->id),
         ]);
     }
-
 
     public function markAsRead(Request $request, $id)
     {
@@ -42,6 +38,7 @@ class NotificationController extends Controller
 
         if ($notification) {
             $notification->markAsRead();
+
             return response()->json(['success' => true]);
         }
 
@@ -64,5 +61,3 @@ class NotificationController extends Controller
         return response()->json(['count' => $count]);
     }
 }
-
-

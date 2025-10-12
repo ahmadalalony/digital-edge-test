@@ -14,8 +14,7 @@ class RegisterUserDTO extends BaseDTO
         public string $country,
         public string $city,
         public string $password
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

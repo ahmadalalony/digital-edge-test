@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Api\V1;
 use App\DTOs\User\UpdateUserDTO;
 use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\SendEmailRequest;
+use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserResource;
-use App\Services\User\UserService;
 use App\Models\User as UserModel;
+use App\Services\User\UserService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,9 +20,7 @@ class UserController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private UserService $userService)
-    {
-    }
+    public function __construct(private UserService $userService) {}
 
     public function index(Request $request)
     {
@@ -53,7 +51,7 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         $result = $this->userService->create($validated);
 
-        if (!$result['success']) {
+        if (! $result['success']) {
             return $this->errorResponse('User creation failed', 400, $result['error']);
         }
 
@@ -98,5 +96,3 @@ class UserController extends Controller
         return $this->successResponse([], __('users.email_sent_successfully'));
     }
 }
-
-

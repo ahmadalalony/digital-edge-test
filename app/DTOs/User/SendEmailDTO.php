@@ -12,8 +12,7 @@ class SendEmailDTO extends BaseDTO
         public string $subject,
         public string $message,
         public bool $asJson = false
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

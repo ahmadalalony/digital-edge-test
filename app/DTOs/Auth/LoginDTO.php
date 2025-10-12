@@ -9,8 +9,7 @@ class LoginDTO extends BaseDTO
     public function __construct(
         public string $identifier,
         public string $password
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

@@ -7,9 +7,7 @@ use App\Services\Product\ProductService;
 
 class ProductViewController extends Controller
 {
-    public function __construct(private ProductService $productService)
-    {
-    }
+    public function __construct(private ProductService $productService) {}
 
     public function index()
     {
@@ -24,10 +22,11 @@ class ProductViewController extends Controller
     public function edit(int $id)
     {
         $result = $this->productService->findWithRelations($id, ['assignedUsers']);
-        if (!$result['success']) {
+        if (! $result['success']) {
             abort(404);
         }
         $product = $result['product'];
+
         return view('dashboard.products.edit', compact('product'));
     }
 }

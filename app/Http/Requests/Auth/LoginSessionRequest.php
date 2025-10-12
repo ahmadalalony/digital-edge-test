@@ -11,12 +11,10 @@ use Illuminate\Validation\ValidationException;
 
 class LoginSessionRequest extends FormRequest
 {
-
     public function authorize(): bool
     {
         return true;
     }
-
 
     public function rules(): array
     {
@@ -30,7 +28,7 @@ class LoginSessionRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (!Auth::guard('web')->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (! Auth::guard('web')->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -41,10 +39,9 @@ class LoginSessionRequest extends FormRequest
         RateLimiter::clear($this->throttleKey());
     }
 
-
     public function ensureIsNotRateLimited(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -60,9 +57,8 @@ class LoginSessionRequest extends FormRequest
         ]);
     }
 
-
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
+        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
 }

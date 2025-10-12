@@ -11,9 +11,7 @@ class ResetPasswordService
 {
     use LogsActivityCustom;
 
-    public function __construct(private UserRepositoryInterface $userRepository)
-    {
-    }
+    public function __construct(private UserRepositoryInterface $userRepository) {}
 
     public function resetPassword(ResetPasswordDTO $dto): array
     {
@@ -30,13 +28,13 @@ class ResetPasswordService
 
         $user = $this->userRepository->findById($dto->userId);
 
-        if (!$user) {
+        if (! $user) {
             RateLimiter::hit($key, now()->addMinutes(rand(15, 30)));
 
             return ['success' => false, 'error' => 'User not found'];
         }
 
-        if (!$this->userRepository->checkVerificationCode($user, $dto->verificationCode)) {
+        if (! $this->userRepository->checkVerificationCode($user, $dto->verificationCode)) {
             RateLimiter::hit($key, now()->addMinutes(rand(15, 30)));
 
             return ['success' => false, 'error' => 'Invalid verification code'];

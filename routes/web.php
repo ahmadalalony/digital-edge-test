@@ -3,9 +3,9 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Dashboard\ActivityLogController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\NotificationController as DashboardNotificationController;
 use App\Http\Controllers\Dashboard\ProductViewController;
 use App\Http\Controllers\Dashboard\UserViewController;
-use App\Http\Controllers\Dashboard\NotificationController as DashboardNotificationController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
 use App\Models\User;
@@ -25,11 +25,9 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('l
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login_store')->middleware('guest:web');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout')->middleware('auth:web');
 
-
 Route::middleware(['auth:web', 'throttle:20,1'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
-
 
 Route::middleware(['auth', 'role:Admin', 'throttle:20,1'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin_dashboard');
@@ -65,10 +63,8 @@ Route::middleware(['auth', 'role:Admin', 'throttle:20,1'])->prefix('admin')->gro
     Route::post('/notifications/read-all', [DashboardNotificationController::class, 'markAllAsRead'])->name('admin_notifications_read_all');
     Route::get('/notifications/count', [DashboardNotificationController::class, 'unreadCount'])->name('admin_notifications_count');
 
-
     Route::get('/users/data', [UserController::class, 'index'])->name('admin_users_data');
     Route::get('/products/data', [ProductController::class, 'index'])->name('admin_products_data');
-
 
     Route::post('/products', [ProductController::class, 'store'])->name('admin_products_store');
     Route::put('/products/{id}', [ProductController::class, 'update'])->name('admin_products_update');
@@ -80,7 +76,7 @@ if (app()->isLocal()) {
     Route::get('/dev-login/{id}', function ($id) {
         $user = User::find($id);
 
-        if (!$user) {
+        if (! $user) {
             return "User with ID {$id} not found.";
         }
 

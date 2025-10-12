@@ -14,9 +14,7 @@ class ProductService
 {
     use LogsActivityCustom;
 
-    public function __construct(private ProductRepositoryInterface $productRepository)
-    {
-    }
+    public function __construct(private ProductRepositoryInterface $productRepository) {}
 
     public function list(int $perPage = 10, ?string $search = null)
     {
@@ -40,7 +38,7 @@ class ProductService
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'data' => $dto->toArray(),
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
 
             return ['success' => false, 'error' => $e->getMessage()];
@@ -52,7 +50,7 @@ class ProductService
         try {
             $product = $this->productRepository->findById($dto->id);
 
-            if (!$product) {
+            if (! $product) {
                 return ['success' => false, 'error' => 'Product not found'];
             }
 
@@ -68,7 +66,7 @@ class ProductService
                 'trace' => $e->getTraceAsString(),
                 'product_id' => $dto->id,
                 'data' => $dto->toArray(),
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
 
             return ['success' => false, 'error' => $e->getMessage()];
@@ -80,7 +78,7 @@ class ProductService
         try {
             $product = $this->productRepository->findById($id);
 
-            if (!$product) {
+            if (! $product) {
                 return ['success' => false, 'error' => 'Product not found'];
             }
 
@@ -97,9 +95,10 @@ class ProductService
     public function findWithRelations(int $id, array $relations = [])
     {
         $product = $this->productRepository->findByIdWithRelations($id, $relations);
-        if (!$product) {
+        if (! $product) {
             return ['success' => false, 'error' => 'Product not found'];
         }
+
         return ['success' => true, 'product' => $product];
     }
 }

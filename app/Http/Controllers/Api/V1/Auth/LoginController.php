@@ -13,9 +13,7 @@ class LoginController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private LoginService $loginService)
-    {
-    }
+    public function __construct(private LoginService $loginService) {}
 
     public function login(LoginRequest $request)
     {
@@ -31,5 +29,3 @@ class LoginController extends Controller
         return $this->errorResponse('Login failed', 401, $result['error']);
     }
 }
-
-

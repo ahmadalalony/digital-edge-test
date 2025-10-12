@@ -14,8 +14,7 @@ class UpdateUserDTO extends BaseDTO
         public ?string $phone = null,
         public ?string $country = null,
         public ?string $city = null
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {
@@ -36,18 +35,24 @@ class UpdateUserDTO extends BaseDTO
     {
         $data = [];
 
-        if ($this->firstName !== null)
+        if ($this->firstName !== null) {
             $data['first_name'] = $this->firstName;
-        if ($this->lastName !== null)
+        }
+        if ($this->lastName !== null) {
             $data['last_name'] = $this->lastName;
-        if ($this->email !== null)
+        }
+        if ($this->email !== null) {
             $data['email'] = $this->email;
-        if ($this->phone !== null)
+        }
+        if ($this->phone !== null) {
             $data['phone'] = $this->phone;
-        if ($this->country !== null)
+        }
+        if ($this->country !== null) {
             $data['country'] = $this->country;
-        if ($this->city !== null)
+        }
+        if ($this->city !== null) {
             $data['city'] = $this->city;
+        }
 
         return $data;
     }

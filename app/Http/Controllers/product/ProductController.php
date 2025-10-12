@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers\Product;
 
+use App\DTOs\Product\CreateProductDTO;
+use App\DTOs\Product\UpdateProductDTO;
+use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\CreateProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
-use App\DTOs\Product\CreateProductDTO;
-use App\DTOs\Product\UpdateProductDTO;
-use App\Services\Product\ProductService;
 use App\Http\Resources\ProductResource;
+use App\Services\Product\ProductService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private ProductService $productService)
-    {
-    }
+    public function __construct(private ProductService $productService) {}
 
     public function index(Request $request)
     {
@@ -37,11 +35,12 @@ class ProductController extends Controller
                 'draw' => intval($request->input('draw')),
                 'recordsTotal' => $products->total(),
                 'recordsFiltered' => $products->total(),
-                'data' => ProductResource::collection($products->items())->resolve()
+                'data' => ProductResource::collection($products->items())->resolve(),
             ]);
         }
 
         $products = $this->productService->list();
+
         return $this->successResponse(ProductResource::collection($products), 'Products retrieved successfully');
     }
 
@@ -84,5 +83,4 @@ class ProductController extends Controller
     {
         return Excel::download(new ProductsExport($request->all()), 'products.csv', \Maatwebsite\Excel\Excel::CSV);
     }
-
 }

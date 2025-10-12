@@ -12,16 +12,14 @@ class ForgotPasswordService
 {
     use LogsActivityCustom;
 
-    public function __construct(private UserRepositoryInterface $userRepository)
-    {
-    }
+    public function __construct(private UserRepositoryInterface $userRepository) {}
 
     public function sendResetCode(ForgotPasswordDTO $dto): array
     {
 
         $user = $this->userRepository->findByIdentifier($dto->identifier);
 
-        if (!$user) {
+        if (! $user) {
             return ['success' => false, 'error' => 'User not found'];
         }
 
