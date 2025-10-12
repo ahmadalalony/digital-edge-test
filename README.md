@@ -81,9 +81,8 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-3. Database (SQLite by default)
+3. Database (mysql)
 ```bash
-touch database/database.sqlite
 php artisan migrate --seed
 ```
 
@@ -103,7 +102,7 @@ npm run dev
 
 ## GITHUB REPOSITORY
 
-Replace with your repository URL:
+ repository URL:
 `https://github.com/ahmadalalony/digital-edge-test`
 
 ## EMAIL (SANDBOX)
