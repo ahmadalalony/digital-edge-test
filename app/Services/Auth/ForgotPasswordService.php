@@ -3,17 +3,16 @@
 namespace App\Services\Auth;
 
 use App\DTOs\Auth\ForgotPasswordDTO;
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordMail;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\LogsActivityCustom;
+use Illuminate\Support\Facades\Mail;
 
 class ForgotPasswordService
 {
     use LogsActivityCustom;
-    public function __construct(private UserRepository $userRepository)
+
+    public function __construct(private UserRepositoryInterface $userRepository)
     {
     }
 
@@ -32,7 +31,7 @@ class ForgotPasswordService
         if ($user->email) {
             Mail::to($user->email)->send(new ResetPasswordMail($code));
         } elseif ($user->phone) {
-            //send sms
+            // send sms
         }
 
         $this->logActivity('Reset Code Sent', ['user_id' => $user->id, 'user_email' => $user->email], $user);
@@ -41,7 +40,6 @@ class ForgotPasswordService
             'success' => true,
             'message' => 'Reset code sent successfully',
             'user' => $user,
-            'code' => $code, // don't return the code in the response after finish development
         ];
     }
 }

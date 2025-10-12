@@ -3,22 +3,26 @@
 namespace App\Services\Product;
 
 use App\DTOs\Product\AssignProductDTO;
-use App\Repositories\ProductRepository;
-use App\Repositories\UserRepository;
+use App\Notifications\ProductAssignedNotification;
+use App\Notifications\ProductUnassignedNotification;
+use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\LogsActivityCustom;
+
 class ProductAssignmentService
 {
     use LogsActivityCustom;
+
     public function __construct(
-        private ProductRepository $productRepository,
-        private UserRepository $userRepository
+        private ProductRepositoryInterface $productRepository,
+        private UserRepositoryInterface $userRepository
     ) {
     }
 
     public function assign(AssignProductDTO $dto): array
     {
-        $product = $this->productRepository->findById($dto->product_id);
-        $user = $this->userRepository->findById($dto->user_id);
+        $product = $this->productRepository->findById($dto->productId);
+        $user = $this->userRepository->findById($dto->userId);
 
         if (!$product || !$user) {
             return ['success' => false, 'error' => 'Invalid product or user'];
@@ -30,13 +34,18 @@ class ProductAssignmentService
 
         $this->logActivity('Product Assigned', ['product_id' => $product->id, 'user_id' => $user->id], $product);
 
+        $user->notify(new ProductAssignedNotification(
+            productName: $product->title ?? 'Unknown Product',
+            assignedBy: auth()->user()->first_name ?? 'Admin'
+        ));
+
         return ['success' => true, 'message' => 'Product assigned successfully'];
     }
 
     public function unassign(AssignProductDTO $dto): array
     {
-        $product = $this->productRepository->findById($dto->product_id);
-        $user = $this->userRepository->findById($dto->user_id);
+        $product = $this->productRepository->findById($dto->productId);
+        $user = $this->userRepository->findById($dto->userId);
 
         if (!$product || !$user) {
             return ['success' => false, 'error' => 'Invalid product or user'];
@@ -47,6 +56,12 @@ class ProductAssignmentService
         }
 
         $this->logActivity('Product Unassigned', ['product_id' => $product->id, 'user_id' => $user->id], $product);
+
+        $user->notify(new ProductUnassignedNotification(
+            productName: $product->title ?? 'Unknown Product',
+            unassignedBy: auth()->user()->first_name ?? 'Admin'
+        ));
+
         return ['success' => true, 'message' => 'Product unassigned successfully'];
     }
 
@@ -58,6 +73,7 @@ class ProductAssignmentService
         }
 
         $products = $this->productRepository->getUserProducts($user);
+
         return ['success' => true, 'products' => $products];
     }
 }

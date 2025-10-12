@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Services\Dashboard\DashboardService;
@@ -13,13 +13,12 @@ class DashboardController extends Controller
 
     public function __construct(private DashboardService $dashboardService)
     {
-        // $this->middleware(['auth:sanctum', 'role:Admin']);
     }
-
 
     public function index()
     {
         $data = $this->dashboardService->getOverviewData();
+
         return view('dashboard.index', compact('data'));
     }
 

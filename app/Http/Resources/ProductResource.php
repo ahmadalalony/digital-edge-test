@@ -19,9 +19,15 @@ class ProductResource extends ApiResource
             'primary_image' => $this->primary_image,
             'other_images' => $this->other_images,
             'created_by' => $this->created_by,
+            'creator' => $this->whenLoaded('creator', function () {
+                return [
+                    'id' => $this->creator->id,
+                    'full_name' => $this->creator->full_name,
+                    'email' => $this->creator->email,
+                ];
+            }),
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
-
 
     }
 }

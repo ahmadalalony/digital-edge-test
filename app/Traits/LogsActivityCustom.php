@@ -2,8 +2,6 @@
 
 namespace App\Traits;
 
-use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Facades\LogBatch;
 use Spatie\Activitylog\Facades\Activity as ActivityFacade;
 
 trait LogsActivityCustom

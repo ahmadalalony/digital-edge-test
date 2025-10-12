@@ -37,7 +37,7 @@
 
         <div class="card mt-4 shadow-sm">
             <div class="card-body">
-                <h5>{{ __('dashboard.Products Added in Last 7 Days') }}</h5>
+                <h5>{{ __('dashboard.Products Added (Last 7 Days)') }}</h5>
                 <canvas id="productsChart" height="120"></canvas>
             </div>
         </div>

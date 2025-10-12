@@ -13,8 +13,10 @@ class ForgotPasswordDTO extends BaseDTO
 
     public static function fromArray(array $data): static
     {
+        self::validateRequiredFields($data, ['identifier']);
+
         return new static(
-            $data['identifier']
+            self::getValue($data, 'identifier', type: 'string')
         );
     }
 }

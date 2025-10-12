@@ -3,17 +3,18 @@
 namespace App\Services\Auth;
 
 use App\DTOs\Auth\LoginDTO;
-use App\Repositories\UserRepository;
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Traits\LogsActivityCustom;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use App\Traits\LogsActivityCustom;
 
 class LoginService
 {
     use LogsActivityCustom;
+
     public function __construct(
-        private UserRepository $userRepository
+        private UserRepositoryInterface $userRepository
     ) {
     }
 
@@ -24,6 +25,7 @@ class LoginService
 
         if (RateLimiter::tooManyAttempts($key, 3)) {
             $seconds = RateLimiter::availableIn($key);
+
             return [
                 'success' => false,
                 'error' => "Too many attempts. Try again in {$seconds} seconds.",
@@ -34,6 +36,7 @@ class LoginService
 
         if (!$user) {
             RateLimiter::hit($key, now()->addMinutes(rand(15, 30)));
+
             return ['success' => false, 'error' => 'User not found'];
         }
 
@@ -43,6 +46,7 @@ class LoginService
 
         if (!Hash::check($dto->password, $user->password)) {
             RateLimiter::hit($key, now()->addMinutes(rand(15, 30)));
+
             return ['success' => false, 'error' => 'Invalid credentials'];
         }
 

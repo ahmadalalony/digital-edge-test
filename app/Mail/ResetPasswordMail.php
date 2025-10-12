@@ -10,9 +10,7 @@ class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public string $code)
-    {
-    }
+    public function __construct(public string $code) {}
 
     public function build()
     {

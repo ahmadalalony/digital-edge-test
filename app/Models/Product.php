@@ -32,7 +32,7 @@ class Product extends Model
     {
         static::creating(function ($product) {
             if (empty($product->slug)) {
-                $product->slug = Str::slug($product->title_en) . '-' . uniqid();
+                $product->slug = Str::slug($product->title_en).'-'.uniqid();
             }
         });
     }

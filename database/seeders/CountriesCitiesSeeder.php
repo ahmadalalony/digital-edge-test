@@ -2,14 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Country;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class CountriesCitiesSeeder extends Seeder
 {
-
     public function run(): void
     {
         $countries = [
@@ -24,7 +22,7 @@ class CountriesCitiesSeeder extends Seeder
                 'iso' => 'SY',
                 'slug' => 'syria',
                 'cities' => ['Damascus', 'Aleppo', 'Homs', 'Latakia'],
-            ]
+            ],
 
         ];
 
@@ -42,5 +40,4 @@ class CountriesCitiesSeeder extends Seeder
             }
         }
     }
-
 }

@@ -3,19 +3,37 @@
 namespace App\Repositories;
 
 use App\Models\User;
-
+use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
     public function create(array $data): User
     {
         return User::create($data);
     }
 
-    public function getAllPaginated(int $perPage = 10)
+    public function getAllPaginated(int $perPage = 10, ?string $search = null, array $filters = [])
     {
-        return User::paginate($perPage);
+        $query = User::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        if (!empty($filters['country'])) {
+            $query->where('country', 'like', "%{$filters['country']}%");
+        }
+        if (!empty($filters['city'])) {
+            $query->where('city', 'like', "%{$filters['city']}%");
+        }
+
+        return $query->paginate($perPage);
     }
 
     public function findById(int $id): ?User
@@ -23,9 +41,15 @@ class UserRepository
         return User::find($id);
     }
 
+    public function findByIdWithRelations(int $id, array $relations = []): ?User
+    {
+        return User::with($relations)->find($id);
+    }
+
     public function update(User $user, array $data): User
     {
         $user->update($data);
+
         return $user;
     }
 
@@ -59,6 +83,11 @@ class UserRepository
         return $user;
     }
 
+    public function createPlain(array $data): User
+    {
+        return User::create($data);
+    }
+
     public function updateVerificationCode(User $user, string $code): User
     {
         $user->verification_code = $code;
@@ -67,12 +96,8 @@ class UserRepository
         return $user;
     }
 
-
     public function checkVerificationCode(User $user, string $code): bool
     {
         return $user->verification_code === $code;
     }
-
-
-
 }

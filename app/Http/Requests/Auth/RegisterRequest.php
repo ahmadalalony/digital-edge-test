@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
                 'regex:/[A-Z]/',
                 'regex:/[a-z]/',
                 'regex:/[0-9]/',
-                'regex:/[@$!%*?&]/'
+                'regex:/[@$!%*?&]/',
             ],
         ];
     }
@@ -45,7 +45,7 @@ class RegisterRequest extends FormRequest
             'email.email' => 'Email is not valid.',
             'phone.unique' => 'Phone already exists.',
             'country.required' => 'Country is required.',
-            'city.required' => 'City is required.'
+            'city.required' => 'City is required.',
         ];
     }
 }

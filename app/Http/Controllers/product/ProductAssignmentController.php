@@ -1,19 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\product;
+namespace App\Http\Controllers\Product;
 
-
-use App\Http\Controllers\Controller;
-use App\Traits\ApiResponse;
-
-
-use App\Services\Product\ProductAssignmentService;
 use App\DTOs\Product\AssignProductDTO;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\AssignProductRequest;
 use App\Http\Resources\ProductResource;
-use Illuminate\Http\Request;
+use App\Services\Product\ProductAssignmentService;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\product\AssignProductRequest;
-
 
 class ProductAssignmentController extends Controller
 {

@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ApiResource extends JsonResource
 {
     protected string $message;
+
     protected bool $status;
 
     public function __construct($resource, string $message = 'Success', bool $status = true)

@@ -3,15 +3,15 @@
 namespace App\Services\Auth;
 
 use App\DTOs\Auth\ChangePasswordDTO;
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\LogsActivityCustom;
+use Illuminate\Support\Facades\Hash;
 
 class ChangePasswordService
 {
     use LogsActivityCustom;
-    public function __construct(private UserRepository $userRepository)
+
+    public function __construct(private UserRepositoryInterface $userRepository)
     {
     }
 
@@ -23,11 +23,11 @@ class ChangePasswordService
             return ['success' => false, 'error' => 'User not found'];
         }
 
-        if (!Hash::check($dto->current_password, $user->password)) {
+        if (!Hash::check($dto->currentPassword, $user->password)) {
             return ['success' => false, 'error' => 'Current password is incorrect'];
         }
 
-        $this->userRepository->updatePassword($user, $dto->new_password);
+        $this->userRepository->updatePassword($user, $dto->newPassword);
 
         $this->logActivity('Password Changed', ['user_id' => $user->id, 'user_email' => $user->email], $user);
 

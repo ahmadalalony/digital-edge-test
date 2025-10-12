@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+
 class UserResource extends ApiResource
 {
     /**
@@ -21,7 +22,7 @@ class UserResource extends ApiResource
             'phone' => $this->phone,
             'country' => $this->country,
             'city' => $this->city,
-            'is_verified' => (bool) $this->is_verified,
+            'email_verified_at' => $this->email_verified_at?->toDateTimeString(),
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
 

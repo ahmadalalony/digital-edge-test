@@ -1,61 +1,115 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Digital Edge Test
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Concise technical overview with only the requested sections.
 
-## About Laravel
+## SYSTEM ARCHITECTURE
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Backend: Laravel 12 (PHP 8.2), service layer in `app/Services`, data via Eloquent ORM.
+- Auth: Web + API via Sanctum; roles/permissions via Spatie Permission.
+- Layers: Controllers → Services → Repositories → Models.
+- Jobs/Queues: Optional for email and heavy processing.
+- Caching/Broadcast: Redis/Pusher when needed.
+- Frontend: Blade + Tailwind + Vite; admin UI JS in `resources/js`.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Simple flow:
+1) Request → 2) `Controller` → 3) `Service` (business rules) → 4) `Repository`/`Model` → 5) Response (Resource/View)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## DATABASE DESIGN
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Core tables and relationships:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- users
+  - Fields: id, first_name, last_name, email, phone, country_id, city_id, email_verified_at, password, deleted_at, timestamps
+  - Relations: `belongsTo(country)`, `belongsTo(city)`, `belongsToMany(products)`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- countries
+  - Fields: id, name_en, name_ar, timestamps
+  - Relations: `hasMany(cities)`, `hasMany(users)`
 
-## Laravel Sponsors
+- cities
+  - Fields: id, country_id, name_en, name_ar, timestamps
+  - Relations: `belongsTo(country)`, `hasMany(users)`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- products
+  - Fields: id, title_en, title_ar, description_en, description_ar, price, primary_image, other_images(json), timestamps
+  - Relations: `belongsToMany(users)`
 
-### Premium Partners
+- product_user (pivot)
+  - Fields: id, product_id, user_id, assigned_at, unassigned_at, timestamps
+  - Relations: `belongsTo(product)`, `belongsTo(user)`
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- personal_access_tokens (Sanctum)
 
-## Contributing
+- roles/permissions (Spatie)
+  - Tables: roles, permissions, model_has_roles, model_has_permissions, role_has_permissions
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- notifications
+  - Fields: id, type, notifiable_type, notifiable_id, data(json), read_at, timestamps
 
-## Code of Conduct
+- activity_log (Spatie Activitylog)
+  - Main fields: id, log_name, description, subject_type/id, causer_type/id, event, properties(json), batch_uuid, created_at
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Design notes:
+- Foreign keys and indexes on `country_id`, `city_id`, `product_id`, `user_id` for performance.
+- Soft deletes for users.
+- JSON columns for composite fields such as `other_images` and `properties`.
 
-## Security Vulnerabilities
+## DEFAULT CREDENTIALS
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Admin
+- Email: `admin@example.com`
+- Password: `p@ssw0rd.123`
 
-## License
+User
+- Email: `user@example.com`
+- Password: `p@ssw0rd.123`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## QUICK START
+
+1. Clone and install dependencies
+```bash
+git clone <repository-url>
+cd digital-edge-test
+composer install
+npm install
+```
+
+2. Environment setup
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+3. Database (SQLite by default)
+```bash
+touch database/database.sqlite
+php artisan migrate --seed
+```
+
+4. Storage symlink (for public files)
+```bash
+php artisan storage:link
+```
+
+5. Run the app
+```bash
+php artisan serve
+npm run dev
+```
+
+6. Login
+- Admin: `admin@example.com` / `p@ssw0rd.123`
+
+## GITHUB REPOSITORY
+
+Replace with your repository URL:
+`https://github.com/ahmadalalony/digital-edge-test`
+
+## EMAIL (SANDBOX)
+
+Emails in development/staging were sent to a sandbox using [Mailtrap](https://mailtrap.io).
+
+- SMTP/API provider: Mailtrap
+- Purpose: capture and inspect emails safely in non-production
+- Notes: Configure SMTP/API credentials in `.env` and use the sandbox inbox for verification and QA
