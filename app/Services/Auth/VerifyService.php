@@ -3,13 +3,15 @@
 namespace App\Services\Auth;
 
 use App\DTOs\Auth\VerifyUserDTO;
-use App\Repositories\UserRepository;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\LogsActivityCustom;
+
 class VerifyService
 {
     use LogsActivityCustom;
+
     public function __construct(
-        private UserRepository $userRepository
+        private UserRepositoryInterface $userRepository
     ) {
     }
 
@@ -21,7 +23,7 @@ class VerifyService
             return ['success' => false, 'error' => 'User not found'];
         }
 
-        if ($user->verification_code !== $dto->verification_code) {
+        if ($user->verification_code !== $dto->verificationCode) {
             return ['success' => false, 'error' => 'Invalid verification code'];
         }
 
@@ -31,5 +33,4 @@ class VerifyService
 
         return ['success' => true, 'user' => $user];
     }
-
 }

@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -20,7 +21,7 @@ return new class extends Migration {
             $table->string('country')->after('phone');
             $table->string('city')->after('country');
 
-            $table->string('verification_code')->nullable()->after('is_verified');
+            $table->string('verification_code')->nullable()->after('email');
         });
     }
 

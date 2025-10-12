@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
+use Spatie\Permission\PermissionRegistrar;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use App\Models\User;
 
 class RolesAndUsersSeeder extends Seeder
 {
-
     public function run(): void
     {
 
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Role::firstOrCreate(['name' => 'Admin']);
         // Role::firstOrCreate(['name' => 'User']);
@@ -32,7 +32,6 @@ class RolesAndUsersSeeder extends Seeder
             ]
         );
         $admin->assignRole('Admin');
-
 
         $user = User::firstOrCreate(
             ['email' => 'user@example.com'],

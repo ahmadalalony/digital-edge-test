@@ -8,15 +8,17 @@ class VerifyUserDTO extends BaseDTO
 {
     public function __construct(
         public string $identifier, // email or phone
-        public string $verification_code
+        public string $verificationCode
     ) {
     }
 
     public static function fromArray(array $data): static
     {
+        self::validateRequiredFields($data, ['identifier', 'verification_code']);
+
         return new static(
-            $data['identifier'],
-            $data['verification_code']
+            self::getValue($data, 'identifier', type: 'string'),
+            self::getValue($data, 'verification_code', type: 'string')
         );
     }
 }

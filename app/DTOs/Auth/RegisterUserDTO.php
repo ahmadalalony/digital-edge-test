@@ -19,14 +19,16 @@ class RegisterUserDTO extends BaseDTO
 
     public static function fromArray(array $data): static
     {
+        self::validateRequiredFields($data, ['first_name', 'last_name', 'country', 'city', 'password']);
+
         return new static(
-            $data['first_name'],
-            $data['last_name'],
-            $data['email'] ?? null,
-            $data['phone'] ?? null,
-            $data['country'],
-            $data['city'],
-            $data['password']
+            self::getValue($data, 'first_name', type: 'string'),
+            self::getValue($data, 'last_name', type: 'string'),
+            self::getValue($data, 'email'),
+            self::getValue($data, 'phone'),
+            self::getValue($data, 'country', type: 'string'),
+            self::getValue($data, 'city', type: 'string'),
+            self::getValue($data, 'password', type: 'string')
         );
     }
 }

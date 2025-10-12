@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\DTOs\Auth\RegisterUserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Services\Auth\RegisterService;
 use App\Traits\ApiResponse;
-use App\Http\Resources\UserResource;
-use App\DTOs\Auth\RegisterUserDTO;
 
 class RegisterController extends Controller
 {
@@ -31,3 +31,5 @@ class RegisterController extends Controller
         return $this->errorResponse('Registration failed', 500, $result['error']);
     }
 }
+
+

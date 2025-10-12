@@ -7,18 +7,20 @@ use App\DTOs\BaseDTO;
 class ResetPasswordDTO extends BaseDTO
 {
     public function __construct(
-        public int $user_id,
-        public string $verification_code,
-        public string $new_password
+        public int $userId,
+        public string $verificationCode,
+        public string $newPassword
     ) {
     }
 
     public static function fromArray(array $data): static
     {
+        self::validateRequiredFields($data, ['user_id', 'verification_code', 'new_password']);
+
         return new static(
-            $data['user_id'],
-            $data['verification_code'],
-            $data['new_password']
+            self::getValue($data, 'user_id', type: 'int'),
+            self::getValue($data, 'verification_code', type: 'string'),
+            self::getValue($data, 'new_password', type: 'string')
         );
     }
 }

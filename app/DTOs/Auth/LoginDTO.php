@@ -14,9 +14,11 @@ class LoginDTO extends BaseDTO
 
     public static function fromArray(array $data): static
     {
+        self::validateRequiredFields($data, ['identifier', 'password']);
+
         return new static(
-            $data['identifier'],
-            $data['password']
+            self::getValue($data, 'identifier', type: 'string'),
+            self::getValue($data, 'password', type: 'string')
         );
     }
 }

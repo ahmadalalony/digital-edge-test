@@ -4,16 +4,34 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\User;
-class ProductRepository
+use App\Repositories\Contracts\ProductRepositoryInterface;
+
+class ProductRepository implements ProductRepositoryInterface
 {
-    public function getAllPaginated(int $perPage = 10)
+    public function getAllPaginated(int $perPage = 10, ?string $search = null)
     {
-        return Product::latest()->paginate($perPage);
+        $query = Product::with('creator');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title_en', 'like', "%{$search}%")
+                    ->orWhere('title_ar', 'like', "%{$search}%")
+                    ->orWhere('description_en', 'like', "%{$search}%")
+                    ->orWhere('description_ar', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->latest()->paginate($perPage);
     }
 
     public function findById(int $id): ?Product
     {
         return Product::find($id);
+    }
+
+    public function findByIdWithRelations(int $id, array $relations = []): ?Product
+    {
+        return Product::with($relations)->find($id);
     }
 
     public function create(array $data): Product
@@ -24,6 +42,7 @@ class ProductRepository
     public function update(Product $product, array $data): Product
     {
         $product->update($data);
+
         return $product;
     }
 
@@ -38,6 +57,7 @@ class ProductRepository
             return false;
         }
         $product->assignedUsers()->attach($user->id);
+
         return true;
     }
 
@@ -47,6 +67,7 @@ class ProductRepository
             return false;
         }
         $product->assignedUsers()->detach($user->id);
+
         return true;
     }
 

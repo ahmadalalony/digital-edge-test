@@ -2,21 +2,19 @@
 
 namespace App\Services\Auth;
 
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Exception;
-use App\Traits\ApiResponse;
 use App\DTOs\Auth\RegisterUserDTO;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\VerificationMail;
+use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Traits\LogsActivityCustom;
+use Exception;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterService
 {
     use LogsActivityCustom;
 
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(private UserRepositoryInterface $userRepository)
     {
     }
 
@@ -32,7 +30,6 @@ class RegisterService
             $user = $this->userRepository->create($userData);
 
             $user->assignRole('User');
-
 
             $this->logActivity(
                 'User registered',
@@ -51,8 +48,6 @@ class RegisterService
                 'user' => $user,
                 'verification_code' => $user->verification_code,
             ];
-
-
 
         } catch (Exception $e) {
             return [
